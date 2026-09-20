@@ -1,0 +1,145 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="description" content="Healthspan Lab — an evidence-first longevity research workspace from Kira Labs." />
+  <title>Healthspan Lab | Kira Labs</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <header class="site-header">
+    <div class="brand">
+      <div class="brand-mark" aria-hidden="true">HL</div>
+      <div>
+        <p class="eyebrow">Kira Labs</p>
+        <h1>Healthspan Lab</h1>
+      </div>
+    </div>
+    <p class="tagline">Evidence-first tools for longevity and geroscience research.</p>
+  </header>
+
+  <main class="app-shell">
+    <section class="notice" aria-label="Research disclaimer">
+      <strong>Research workspace:</strong>
+      Healthspan Lab organizes scientific information. It is not a medical device and does not provide diagnosis, treatment, or individualized medical advice.
+    </section>
+
+    <nav class="tabs" aria-label="Healthspan Lab sections">
+      <button class="tab active" data-tab="research">Research</button>
+      <button class="tab" data-tab="hallmarks">Hallmarks</button>
+      <button class="tab" data-tab="trials">Clinical Trials</button>
+      <button class="tab" data-tab="notebook">Research Notebook</button>
+    </nav>
+
+    <section id="research" class="panel active">
+      <div class="panel-heading">
+        <div>
+          <p class="eyebrow">Research Explorer</p>
+          <h2>Separate interesting ideas from strong evidence</h2>
+        </div>
+        <span class="status-badge">V1 foundation</span>
+      </div>
+
+      <div class="toolbar">
+        <label>
+          <span>Search topics</span>
+          <input id="researchSearch" type="search" placeholder="e.g. senescence, exercise, epigenetics" />
+        </label>
+        <label>
+          <span>Evidence level</span>
+          <select id="evidenceFilter">
+            <option value="all">All levels</option>
+            <option value="mechanistic">Mechanistic / cell</option>
+            <option value="animal">Animal</option>
+            <option value="observational">Human observational</option>
+            <option value="interventional">Human interventional</option>
+          </select>
+        </label>
+      </div>
+
+      <div id="researchCards" class="card-grid"></div>
+    </section>
+
+    <section id="hallmarks" class="panel">
+      <div class="panel-heading">
+        <div>
+          <p class="eyebrow">Hallmarks Explorer</p>
+          <h2>The 12 hallmarks of aging</h2>
+        </div>
+      </div>
+      <p class="section-intro">
+        A framework used by researchers to organize biological processes associated with aging.
+        A hallmark is a research framework, not proof that changing it will extend human life.
+      </p>
+      <div id="hallmarkCards" class="card-grid"></div>
+    </section>
+
+    <section id="trials" class="panel">
+      <div class="panel-heading">
+        <div>
+          <p class="eyebrow">Clinical Trials</p>
+          <h2>Move from headlines to human studies</h2>
+        </div>
+      </div>
+
+      <div class="trial-search">
+        <label for="trialQuery">Search ClinicalTrials.gov</label>
+        <div class="inline-form">
+          <input id="trialQuery" type="search" placeholder="e.g. cellular senescence" />
+          <button id="trialSearchButton" class="primary">Open search</button>
+        </div>
+        <p class="helper">
+          V1 opens the official ClinicalTrials.gov search. A later version can import trial metadata and track status changes.
+        </p>
+      </div>
+
+      <div class="evidence-ladder">
+        <h3>Evidence ladder used by Healthspan Lab</h3>
+        <ol>
+          <li><strong>Mechanistic:</strong> cells, pathways, molecules, or laboratory models.</li>
+          <li><strong>Animal:</strong> effects observed in non-human organisms.</li>
+          <li><strong>Human observational:</strong> associations in people without randomized intervention.</li>
+          <li><strong>Human interventional:</strong> an intervention is prospectively tested in people.</li>
+          <li><strong>Replicated / synthesized:</strong> multiple credible studies or rigorous evidence synthesis.</li>
+        </ol>
+      </div>
+    </section>
+
+    <section id="notebook" class="panel">
+      <div class="panel-heading">
+        <div>
+          <p class="eyebrow">Research Notebook</p>
+          <h2>Keep questions, sources, and conclusions together</h2>
+        </div>
+        <button id="exportNotes" class="secondary">Export JSON</button>
+      </div>
+
+      <form id="noteForm" class="note-form">
+        <label>
+          <span>Title</span>
+          <input id="noteTitle" required maxlength="120" placeholder="Research question or paper title" />
+        </label>
+        <label>
+          <span>Tags</span>
+          <input id="noteTags" placeholder="senescence, trial, biomarker" />
+        </label>
+        <label class="full">
+          <span>Notes</span>
+          <textarea id="noteBody" required rows="7" placeholder="What did you learn? What is still uncertain? What source should be checked next?"></textarea>
+        </label>
+        <button class="primary" type="submit">Save note locally</button>
+      </form>
+
+      <p class="helper">Notebook entries are stored only in this browser using localStorage in Version 1.</p>
+      <div id="notesList" class="notes-list"></div>
+    </section>
+  </main>
+
+  <footer>
+    <p>Healthspan Lab · Kira Labs · Open-source research software</p>
+  </footer>
+
+  <script src="app.js"></script>
+</body>
+</html>
