@@ -1,0 +1,39 @@
+name: Static checks
+
+on:
+  push:
+    branches:
+      - main
+      - "build/**"
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+
+      - name: Check JavaScript syntax
+        run: node --check app.js
+
+      - name: Check required files
+        shell: bash
+        run: |
+          test -f index.html
+          test -f styles.css
+          test -f app.js
+          test -f README.md
+          test -f docs/RESEARCH_STANDARD.md
+          test -f docs/DATA_MODEL.md
+          grep -q 'styles.css' index.html
+          grep -q 'app.js' index.html
