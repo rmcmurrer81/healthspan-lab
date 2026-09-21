@@ -944,3 +944,228 @@ footer p { margin-bottom: 5px; }
     flex-wrap: wrap;
   }
 }
+
+/* Health records and research-backed options */
+
+.records-toolbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 14px;
+  margin-bottom: 12px;
+  padding: 14px 16px;
+  border: 1px solid var(--line-soft);
+  border-radius: 14px;
+  background: rgba(18, 35, 58, .55);
+}
+
+.record-list,
+.fact-list {
+  display: grid;
+  gap: 10px;
+}
+
+.record-card,
+.fact-card,
+.option-card {
+  border: 1px solid var(--line-soft);
+  border-radius: 14px;
+  background: #0a1727;
+}
+
+.record-card {
+  padding: 14px;
+}
+
+.record-card-head,
+.option-card-top,
+.fact-card {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 12px;
+}
+
+.record-card-head strong,
+.fact-card strong,
+.option-card h3 {
+  display: block;
+}
+
+.record-card-head small,
+.fact-card small {
+  display: block;
+  margin-top: 4px;
+  color: var(--muted-2);
+  line-height: 1.4;
+}
+
+.record-date {
+  display: block;
+  max-width: 260px;
+  margin-top: 12px;
+}
+
+.record-date span {
+  display: block;
+  margin-bottom: 5px;
+  color: var(--muted-2);
+  font-size: .75rem;
+  font-weight: 750;
+}
+
+.record-actions,
+.fact-actions,
+.option-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 12px;
+}
+
+.text-preview {
+  margin-top: 12px;
+  border: 1px solid var(--line-soft);
+  border-radius: 11px;
+  background: #07111f;
+}
+
+.text-preview summary {
+  cursor: pointer;
+  padding: 10px 12px;
+  color: #bcd8fb;
+}
+
+.text-preview pre {
+  max-height: 260px;
+  margin: 0;
+  padding: 12px;
+  overflow: auto;
+  border-top: 1px solid var(--line-soft);
+  color: var(--muted);
+  white-space: pre-wrap;
+  word-break: break-word;
+  font-family: ui-monospace, SFMono-Regular, Consolas, monospace;
+  font-size: .78rem;
+  line-height: 1.5;
+}
+
+.record-error {
+  margin: 10px 0 0;
+  color: #ffb0b0;
+}
+
+.fact-card {
+  padding: 12px 13px;
+}
+
+.fact-card .fact-actions {
+  margin-top: 0;
+  flex: 0 0 auto;
+}
+
+.fact-value {
+  display: block;
+  margin-top: 4px;
+  color: var(--text);
+  font-size: 1.05rem;
+}
+
+.draft-fact {
+  border-color: rgba(255, 210, 118, .22);
+}
+
+.confirmed-fact {
+  border-color: rgba(103, 225, 194, .20);
+}
+
+.health-fact-form {
+  display: grid;
+  grid-template-columns: 1.2fr .7fr .7fr .8fr auto;
+  gap: 10px;
+  align-items: end;
+  margin-bottom: 14px;
+}
+
+.compact-toggle {
+  padding-bottom: 0;
+  color: var(--muted);
+}
+
+.options-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 12px;
+  margin-top: 14px;
+}
+
+.option-card {
+  padding: 16px;
+}
+
+.option-card h3 {
+  margin-top: 8px;
+}
+
+.option-card p {
+  color: var(--muted);
+  line-height: 1.55;
+}
+
+.option-reason {
+  margin: 10px 0;
+  padding: 9px 11px;
+  border-radius: 10px;
+  background: rgba(103, 225, 194, .06);
+  color: #a9ead8;
+  font-size: .82rem;
+}
+
+.option-safety {
+  padding: 10px 11px;
+  border: 1px solid rgba(255, 210, 118, .15);
+  border-radius: 10px;
+  background: rgba(255, 210, 118, .04);
+  color: #dfcfac;
+  font-size: .82rem;
+  line-height: 1.5;
+}
+
+.retailer-link {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
+}
+
+@media (max-width: 980px) {
+  .health-fact-form {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .health-fact-form .button {
+    width: 100%;
+  }
+}
+
+@media (max-width: 680px) {
+  .records-toolbar,
+  .record-card-head,
+  .option-card-top,
+  .fact-card {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .health-fact-form {
+    grid-template-columns: 1fr;
+  }
+
+  .fact-card .fact-actions {
+    margin-top: 10px;
+  }
+
+  .options-grid {
+    grid-template-columns: 1fr;
+  }
+}
