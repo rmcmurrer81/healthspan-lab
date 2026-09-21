@@ -24,6 +24,13 @@ Status: in development
 - [x] research-gap detection
 - [x] Hallmarks-of-Aging detection
 - [x] research dossier summary
+- [x] Healthspan conversational research interface
+- [x] goal-to-research query expansion
+- [x] separated research / device / medication / market / recruiting-trial lanes
+- [x] device and neurostimulation research lane with regulatory-resource links
+- [x] medication intervention extraction from ClinicalTrials.gov records
+- [x] U.S. medication labeling / market-status lookup links
+- [x] profile-specific local chat history
 - [x] SVG research graph
 - [x] multiple household profiles
 - [x] birthday-to-age calculation
