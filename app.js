@@ -1431,6 +1431,8 @@ window.getHealthspanResearchState = function getHealthspanResearchState() {
 };
 
 window.runHealthspanResearch = runResearch;
+window.searchHealthspanPubMed = searchPubMed;
+window.searchHealthspanClinicalTrials = searchClinicalTrials;
 window.openHealthspanTab = openTab;
 window.getHealthspanActiveProfile = getActiveProfile;
 
