@@ -780,6 +780,24 @@ function retailerSearchUrl(retailer, query) {
   return "https://www.walgreens.com/search/results.jsp?Ntt=" + encodeURIComponent(query);
 }
 
+window.getHealthspanProductOptions = function getHealthspanProductOptions() {
+  const context = collectOptionContext();
+  return PRODUCT_OPTIONS.map(function (option) {
+    const match = scoreProductOption(option, context);
+    return {
+      id: option.id,
+      name: option.name,
+      category: option.category,
+      why: option.why,
+      safety: option.safety,
+      researchQuery: option.researchQuery,
+      retailerQuery: option.retailerQuery,
+      score: match.score,
+      reasons: match.reasons
+    };
+  }).sort(function (a, b) { return b.score - a.score; });
+};
+
 function renderResearchBackedOptions() {
   const root = document.getElementById("researchBackedOptions");
   const summary = document.getElementById("optionsProfileSummary");
