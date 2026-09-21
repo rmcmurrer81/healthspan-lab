@@ -6,6 +6,23 @@ Healthspan Lab is an open-source Kira Labs research workspace for investigating 
 
 Version 2 turns the original prototype into a live research command center.
 
+### Healthspan Chat
+
+The primary interface is now conversational. A user can type a goal such as:
+
+> I want to improve my memory.
+
+Healthspan turns that into live source searches and separates the answer into:
+
+- **Research** — PubMed literature and evidence records.
+- **Devices & neurostimulation** — device trials and approaches such as tDCS/TMS when relevant, kept separate from ordinary shopping.
+- **Medications being studied** — drug/biological interventions found in clinical trials, with links to trial records and U.S. labeling/market-status searches.
+- **Market & wellness options** — conservative non-prescription product categories matched to the profile/research context.
+- **Trials to investigate** — recruiting, not-yet-recruiting, or invitation-based studies from ClinicalTrials.gov.
+
+Medication and neurostimulation lanes summarize evidence and study activity. They are not instructions to start a medication or electrical-stimulation protocol.
+
+
 ### Research Command Center
 
 Enter a research question and Healthspan Lab can:
@@ -131,6 +148,7 @@ http://localhost:8000
 - `styles.css` — responsive visual system
 - `app.js` — live research engine, profile matching, graph, watchlist, and notebook
 - `health-records.js` — local medical-record storage, reviewable extraction, confirmed health context, and research-backed product-category matching
+- `healthspan-chat.js` — conversational research orchestration and separated research/device/medication/market/trial lanes
 - `docs/RESEARCH_STANDARD.md` — evidence-handling rules
 - `docs/DATA_MODEL.md` — structured research and profile model
 - `docs/PRIVACY_AND_PROFILES.md` — privacy and multi-user matching rules
