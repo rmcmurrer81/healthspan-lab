@@ -102,7 +102,8 @@
     </section>
 
     <nav class="tabs" aria-label="Healthspan Lab sections">
-      <button class="tab active" data-tab="command">Command Center</button>
+      <button class="tab active" data-tab="chat">Healthspan Chat</button>
+      <button class="tab" data-tab="command">Command Center</button>
       <button class="tab" data-tab="evidence">Evidence</button>
       <button class="tab" data-tab="trials">Trials</button>
       <button class="tab" data-tab="graph">Research Graph</button>
@@ -113,7 +114,75 @@
       <button class="tab" data-tab="notebook">Notebook</button>
     </nav>
 
-    <section id="command" class="panel active">
+    <section id="chat" class="panel active">
+      <div class="panel-heading">
+        <div>
+          <p class="eyebrow">Healthspan Chat</p>
+          <h2>Talk to the research workspace in plain language</h2>
+          <p class="section-intro">
+            Describe a goal such as “I want to improve my memory.” Healthspan will turn it into a live research search,
+            then separate what it finds into evidence, devices and neurostimulation, medications being studied,
+            practical market options, and clinical trials.
+          </p>
+        </div>
+        <span class="status-badge">Profile-aware</span>
+      </div>
+
+      <div class="chat-layout">
+        <section class="chat-window">
+          <div id="healthspanChatMessages" class="chat-messages" aria-live="polite">
+            <article class="chat-message assistant-message">
+              <div class="chat-avatar">H</div>
+              <div class="chat-bubble">
+                <strong>Healthspan</strong>
+                <p>Tell me what you want to improve or investigate. I’ll organize the current research instead of mixing papers, devices, medications, products, and trials together.</p>
+              </div>
+            </article>
+          </div>
+
+          <div class="chat-suggestions">
+            <button class="query-chip" data-chat-example="I want to improve my memory">Improve my memory</button>
+            <button class="query-chip" data-chat-example="I want to preserve muscle and mobility as I get older">Preserve muscle and mobility</button>
+            <button class="query-chip" data-chat-example="What is being researched for better sleep and healthy aging?">Sleep and healthy aging</button>
+            <button class="query-chip" data-chat-example="What research is being done on biological age and epigenetic clocks?">Biological age</button>
+          </div>
+
+          <form id="healthspanChatForm" class="chat-composer">
+            <textarea id="healthspanChatInput" rows="3" placeholder="Example: I want to improve my memory. Show me research, tDCS/device studies, medications being studied, market options, and trials I might be able to join."></textarea>
+            <div class="chat-composer-actions">
+              <span class="helper-inline">Enter to send · Shift+Enter for a new line</span>
+              <button id="healthspanChatSend" class="button primary" type="submit">Ask Healthspan</button>
+            </div>
+          </form>
+        </section>
+
+        <aside class="chat-context-card">
+          <span class="context-label">Active context</span>
+          <div id="healthspanChatProfile">No active profile</div>
+          <p class="helper">When a profile is active, Healthspan can use age, goals, location, interests, and confirmed record labels to rank relevance.</p>
+          <div class="chat-safety-note">
+            <strong>Important:</strong>
+            medication and brain-stimulation sections summarize research and trial activity. They do not tell a user to start a drug or electrical-stimulation protocol.
+          </div>
+        </aside>
+      </div>
+
+      <section class="subpanel chat-results-panel">
+        <div class="subpanel-heading">
+          <div>
+            <h3>Latest Healthspan answer</h3>
+            <span id="healthspanChatAnswerLabel" class="helper-inline">Ask a question to build separated result lanes.</span>
+          </div>
+          <button id="openFullDossierBtn" class="text-button" type="button">Open full dossier →</button>
+        </div>
+
+        <div id="healthspanChatLanes" class="chat-lanes">
+          <div class="empty-state">Your answer will appear here after Healthspan finishes the live research run.</div>
+        </div>
+      </section>
+    </section>
+
+    <section id="command" class="panel">
       <div class="panel-heading">
         <div>
           <p class="eyebrow">Kira Research Agent</p>
@@ -540,5 +609,6 @@
 
   <script src="app.js"></script>
   <script src="health-records.js"></script>
+  <script src="healthspan-chat.js"></script>
 </body>
 </html>
