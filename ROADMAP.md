@@ -32,7 +32,15 @@ Status: in development
 - [x] local research watchlist
 - [x] new-retrieved-ID comparison on watchlist reruns
 - [x] workspace JSON export/import
-- [ ] encrypted local profile vault
+- [x] per-profile PDF / image medical-record storage in IndexedDB
+- [x] browser-side PDF text extraction
+- [x] browser OCR for scanned records and photos
+- [x] review-before-confirm measurement workflow
+- [x] confirmed health-fact labels in research relevance
+- [x] conservative research-backed product-category discovery
+- [x] Amazon and Walgreens category search links
+- [x] raw medical records excluded from ordinary JSON export
+- [ ] encrypted local profile and record vault
 - [ ] citation attachment from a paper/trial directly into a notebook note
 - [ ] pagination beyond the first retrieved result set
 - [ ] dedicated intervention dossier pages
