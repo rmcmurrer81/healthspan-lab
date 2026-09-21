@@ -107,6 +107,8 @@
       <button class="tab" data-tab="trials">Trials</button>
       <button class="tab" data-tab="graph">Research Graph</button>
       <button class="tab" data-tab="profiles">Profiles</button>
+      <button class="tab" data-tab="records">Health Records</button>
+      <button class="tab" data-tab="options">Research-Backed Options</button>
       <button class="tab" data-tab="watchlist">Watchlist</button>
       <button class="tab" data-tab="notebook">Notebook</button>
     </nav>
@@ -360,6 +362,122 @@
       </div>
     </section>
 
+    <section id="records" class="panel">
+      <div class="panel-heading">
+        <div>
+          <p class="eyebrow">Health Records</p>
+          <h2>Give each profile better context from recent medical records</h2>
+        </div>
+        <span class="status-badge">Local review workflow</span>
+      </div>
+
+      <div class="privacy-panel">
+        <strong>Private by design:</strong>
+        uploaded files are stored in this browser's IndexedDB for the active profile. Healthspan Lab does not commit them to GitHub.
+        Text extraction runs in the browser, but OCR/PDF libraries and OCR language assets are loaded from public CDNs when extraction is requested.
+        Extracted facts are drafts until you confirm them.
+      </div>
+
+      <div class="records-toolbar">
+        <div>
+          <span class="context-label">Active record owner</span>
+          <strong id="recordsProfileLabel">No active profile</strong>
+        </div>
+        <label class="button primary file-button">
+          Add PDF or photo
+          <input id="recordUploadInput" type="file" accept="application/pdf,image/*" multiple hidden />
+        </label>
+      </div>
+
+      <p class="helper">
+        Good examples include recent lab reports, visit summaries, discharge paperwork, or a clear photo of printed results.
+        OCR can make mistakes, especially with numbers, so Healthspan Lab will not use an extracted value until you confirm it.
+      </p>
+
+      <div id="recordExtractionStatus" class="research-status" aria-live="polite"></div>
+
+      <div class="two-column">
+        <section class="subpanel">
+          <div class="subpanel-heading">
+            <h3>Uploaded records</h3>
+            <span class="helper-inline">Stored per profile</span>
+          </div>
+          <div id="healthRecordList" class="record-list">
+            <div class="empty-mini">Select a profile and add a PDF or photo.</div>
+          </div>
+        </section>
+
+        <section class="subpanel">
+          <div class="subpanel-heading">
+            <h3>Draft facts to review</h3>
+            <span class="helper-inline">Never used automatically</span>
+          </div>
+          <div id="draftHealthFacts" class="fact-list">
+            <div class="empty-mini">No extracted draft facts.</div>
+          </div>
+        </section>
+      </div>
+
+      <section class="subpanel">
+        <div class="subpanel-heading">
+          <h3>Confirmed profile facts</h3>
+          <label class="toggle-row compact-toggle">
+            <input id="useFactsForMatching" type="checkbox" checked />
+            <span>Use confirmed fact labels for research relevance</span>
+          </label>
+        </div>
+
+        <form id="manualHealthFactForm" class="health-fact-form">
+          <label>
+            <span>Fact / measurement</span>
+            <input id="manualFactName" required placeholder="Example: LDL cholesterol" />
+          </label>
+          <label>
+            <span>Value</span>
+            <input id="manualFactValue" placeholder="Example: 110" />
+          </label>
+          <label>
+            <span>Unit</span>
+            <input id="manualFactUnit" placeholder="Example: mg/dL" />
+          </label>
+          <label>
+            <span>Record date</span>
+            <input id="manualFactDate" type="date" />
+          </label>
+          <button class="button secondary" type="submit">Add confirmed fact</button>
+        </form>
+
+        <div id="confirmedHealthFacts" class="fact-list">
+          <div class="empty-mini">No confirmed facts for this profile.</div>
+        </div>
+      </section>
+    </section>
+
+    <section id="options" class="panel">
+      <div class="panel-heading">
+        <div>
+          <p class="eyebrow">Research-Backed Options</p>
+          <h2>Turn research into practical things a user can investigate</h2>
+        </div>
+        <button id="refreshOptionsBtn" class="button secondary" type="button">Refresh matches</button>
+      </div>
+
+      <div class="trial-warning">
+        These are research-informed product <strong>categories</strong>, not prescriptions or claims that a product treats aging.
+        Healthspan Lab keeps evidence strength separate from profile relevance. Version 2.1 begins with non-prescription devices and lower-risk wellness items;
+        it does not recommend prescription drugs, hormones, or high-risk supplements.
+      </div>
+
+      <div id="optionsProfileSummary" class="profile-context">
+        <div><span class="context-label">Personalization</span><strong>No active profile</strong></div>
+        <p>Select a profile to see why an option surfaced.</p>
+      </div>
+
+      <div id="researchBackedOptions" class="options-grid">
+        <div class="empty-state">Select a profile or run a research question to generate relevant options.</div>
+      </div>
+    </section>
+
     <section id="watchlist" class="panel">
       <div class="panel-heading">
         <div>
@@ -421,5 +539,6 @@
   </footer>
 
   <script src="app.js"></script>
+  <script src="health-records.js"></script>
 </body>
 </html>
