@@ -108,6 +108,22 @@ window.getConfirmedHealthTerms = function getConfirmedHealthTerms(profileId) {
   );
 };
 
+window.getHealthWorkspaceData = function getHealthWorkspaceData() {
+  return {
+    confirmedFacts: getConfirmedFacts(),
+    matchSettings: getHealthMatchSettings(),
+    note: "Raw PDFs/photos are intentionally excluded from JSON workspace exports. They remain in browser IndexedDB."
+  };
+};
+
+window.importHealthWorkspaceData = function importHealthWorkspaceData(data) {
+  if (!data || typeof data !== "object") return;
+  if (Array.isArray(data.confirmedFacts)) saveConfirmedFacts(data.confirmedFacts);
+  if (data.matchSettings && typeof data.matchSettings === "object") {
+    saveHealthMatchSettings(data.matchSettings);
+  }
+};
+
 function uniqueLocal(values) {
   return Array.from(new Set(values));
 }
@@ -232,6 +248,23 @@ async function deleteHealthRecord(id) {
   });
 }
 
+window.deleteHealthDataForProfile = async function deleteHealthDataForProfile(profileId) {
+  if (!profileId) return;
+
+  const records = await getHealthRecordsForProfile(profileId);
+  for (const record of records) {
+    await deleteHealthRecord(record.id);
+  }
+
+  saveConfirmedFacts(
+    getConfirmedFacts().filter(function (fact) { return fact.profileId !== profileId; })
+  );
+
+  const settings = getHealthMatchSettings();
+  delete settings[profileId];
+  saveHealthMatchSettings(settings);
+};
+
 function setRecordStatus(message, type) {
   const root = document.getElementById("recordExtractionStatus");
   if (!root) return;
@@ -248,12 +281,20 @@ async function handleRecordFiles(files) {
     return;
   }
 
-  const allowed = Array.from(files || []).filter(function (file) {
-    return file.type === "application/pdf" || file.type.startsWith("image/");
+  const allFiles = Array.from(files || []);
+  const oversized = allFiles.filter(function (file) { return file.size > 25 * 1024 * 1024; });
+  const allowed = allFiles.filter(function (file) {
+    return file.size <= 25 * 1024 * 1024 &&
+      (file.type === "application/pdf" || file.type.startsWith("image/"));
   });
 
   if (!allowed.length) {
-    setRecordStatus("Choose a PDF or image file.", "error");
+    setRecordStatus(
+      oversized.length
+        ? "Each record must be 25 MB or smaller."
+        : "Choose a PDF or image file.",
+      "error"
+    );
     return;
   }
 
