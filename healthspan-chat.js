@@ -321,15 +321,22 @@ function medicationCard(item) {
   '</article>';
 }
 
-function tDCSExplainerCard(query) {
+function deviceExplainerCard(query, userMessage) {
   const pubmed = "https://pubmed.ncbi.nlm.nih.gov/?term=" + encodeURIComponent(query);
   const trials = "https://clinicaltrials.gov/search?term=" + encodeURIComponent(query);
   const fda = "https://www.fda.gov/medical-devices/device-approvals-denials-and-clearances/510k-clearances";
+  const memoryLike = goalFamily(userMessage) === "memory" || /tdcs|transcranial|electrode|neurostim/i.test(userMessage);
+
+  const tag = memoryLike ? "tDCS / related stimulation" : "device / stimulation research";
+  const title = memoryLike ? "Electrical brain-stimulation devices" : "Devices and stimulation approaches";
+  const description = memoryLike
+    ? "Healthspan separates tDCS and related neurostimulation from ordinary consumer wellness products. Research and commercial devices exist, but device labeling, intended use, electrode placement, current, duration, contraindications, and regulatory status matter. Healthspan does not provide a self-stimulation protocol or rank a device for unsupervised use."
+    : "Healthspan keeps devices and stimulation approaches separate from medications and ordinary wellness products. A device appearing in research or on the market does not establish that it is effective or appropriate for the active profile.";
 
   return '<article class="chat-result-card device-caution-card">' +
-    '<div class="tag-row"><span class="warn-tag">Neurostimulation / device research</span><span class="tag">tDCS / related stimulation</span></div>' +
-    '<h4>Electrical brain-stimulation devices</h4>' +
-    '<p>Healthspan separates tDCS and related neurostimulation from ordinary consumer wellness products. Research and commercial devices exist, but device labeling, intended use, electrode placement, current, duration, contraindications, and regulatory status matter. Healthspan does not provide a self-stimulation protocol or rank a device for unsupervised use.</p>' +
+    '<div class="tag-row"><span class="warn-tag">Device research</span><span class="tag">' + hsEscape(tag) + '</span></div>' +
+    '<h4>' + hsEscape(title) + '</h4>' +
+    '<p>' + hsEscape(description) + '</p>' +
     '<div class="result-links">' +
       '<a href="' + hsEscape(pubmed) + '" target="_blank" rel="noopener noreferrer">Search PubMed ↗</a>' +
       '<a href="' + hsEscape(trials) + '" target="_blank" rel="noopener noreferrer">Search trials ↗</a>' +
@@ -455,7 +462,7 @@ async function runHealthspanChat(message) {
       : '<div class="empty-mini">No paper records were returned in this search.</div>';
 
     const deviceBody =
-      tDCSExplainerCard(queries.device) +
+      deviceExplainerCard(queries.device, message) +
       (allDeviceTrials.length
         ? allDeviceTrials.slice(0, 5).map(function (trial) { return trialLaneCard(trial, "Device / neurostimulation trial"); }).join("")
         : '<div class="empty-mini">No device-specific trial was found in the retrieved pages. Use the live search links above for a broader check.</div>');
