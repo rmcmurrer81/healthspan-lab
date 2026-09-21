@@ -94,3 +94,33 @@ Future code should preserve these principles:
 4. medical suitability must not be inferred from a relevance score;
 5. private profile data should not be committed to the public repository;
 6. stronger encryption should be preferred before adding more sensitive profile fields.
+
+
+## Uploaded medical records
+
+Healthspan Lab may store PDFs and images for an active profile in browser IndexedDB.
+
+Version 2.1 rules:
+
+- a record belongs to exactly one profile;
+- records are not committed to the public repository;
+- raw record files are not included in ordinary JSON workspace exports;
+- deleting a profile triggers deletion of that profile's local records and confirmed health facts;
+- each uploaded record is limited to 25 MB in the browser implementation;
+- text extracted from a PDF or image is treated as unverified;
+- detected measurements enter a draft review queue;
+- only facts explicitly confirmed by the user can contribute labels to research matching.
+
+PDF text extraction and OCR are performed in the browser. The extraction libraries and OCR language assets are loaded from public CDNs when extraction is requested. The app should not claim that this is equivalent to an offline encrypted medical-record vault.
+
+## Numerical medical data
+
+Version 2.1 stores confirmed values but does not automatically decide whether a result is:
+
+- high or low;
+- normal or abnormal;
+- dangerous;
+- diagnostic;
+- an indication for a supplement, medication, or dose.
+
+A future interpretation layer should preserve the source laboratory's own reference ranges, units, specimen context, date, and clinician notes before making any structured comparison.
