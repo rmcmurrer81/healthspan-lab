@@ -150,10 +150,16 @@ function getActiveProfile() {
 
 function profileTerms(profile) {
   if (!profile) return [];
+  const confirmedHealthTerms =
+    typeof window.getConfirmedHealthTerms === "function"
+      ? window.getConfirmedHealthTerms(profile.id)
+      : [];
+
   return unique(
     splitTerms(profile.conditions)
       .concat(splitTerms(profile.goals))
       .concat(splitTerms(profile.interests))
+      .concat(confirmedHealthTerms)
       .map(normalize)
       .filter(function (term) { return term.length > 2; })
   );
@@ -178,6 +184,7 @@ function renderProfileSelector() {
 
   renderProfileContext();
   renderProfilePreview();
+  window.dispatchEvent(new CustomEvent("healthspan:profile-changed"));
 }
 
 function renderProfileContext() {
@@ -783,6 +790,7 @@ function renderAllResearch() {
   document.getElementById("trialQueryLabel").textContent =
     currentResearch.query ? truncate(currentResearch.query, 55) : "ClinicalTrials.gov API v2";
   document.getElementById("noteQuestion").value = currentResearch.query || "";
+  window.dispatchEvent(new CustomEvent("healthspan:research-rendered"));
 }
 
 function renderMetrics() {
