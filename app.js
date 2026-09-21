@@ -573,7 +573,17 @@ function parseTrial(study) {
   const eligibility = protocol.eligibilityModule || {};
   const contacts = protocol.contactsLocationsModule || {};
 
-  const interventions = (arms.interventions || []).map(function (item) {
+  const interventionDetails = (arms.interventions || []).map(function (item) {
+    return {
+      name: item.name || "",
+      type: item.type || "",
+      description: item.description || ""
+    };
+  }).filter(function (item) {
+    return item.name || item.type;
+  });
+
+  const interventions = interventionDetails.map(function (item) {
     return item.name || item.type || "";
   }).filter(Boolean);
 
@@ -593,6 +603,7 @@ function parseTrial(study) {
     phases: design.phases || [],
     studyType: design.studyType || "",
     interventions: interventions,
+    interventionDetails: interventionDetails,
     sex: eligibility.sex || "ALL",
     minimumAge: eligibility.minimumAge || "",
     maximumAge: eligibility.maximumAge || "",
@@ -1361,11 +1372,7 @@ function downloadJson(filename, data) {
 document.getElementById("exportNotes").addEventListener("click", function () {
   downloadJson("healthspan-lab-notes.json", {
     exportedAt: new Date().toISOString(),
-    notes: getNotes(),
-    healthContext:
-      typeof window.getHealthWorkspaceData === "function"
-        ? window.getHealthWorkspaceData()
-        : null
+    notes: getNotes()
   });
 });
 
@@ -1376,7 +1383,11 @@ document.getElementById("exportWorkspaceBtn").addEventListener("click", function
     profiles: getProfiles(),
     activeProfileId: getActiveProfileId(),
     watchlist: getWatchlist(),
-    notes: getNotes()
+    notes: getNotes(),
+    healthContext:
+      typeof window.getHealthWorkspaceData === "function"
+        ? window.getHealthWorkspaceData()
+        : null
   });
 });
 
@@ -1414,6 +1425,14 @@ document.getElementById("importWorkspaceInput").addEventListener("change", async
     event.target.value = "";
   }
 });
+
+window.getHealthspanResearchState = function getHealthspanResearchState() {
+  return currentResearch;
+};
+
+window.runHealthspanResearch = runResearch;
+window.openHealthspanTab = openTab;
+window.getHealthspanActiveProfile = getActiveProfile;
 
 renderProfileSelector();
 renderWatchlist();
