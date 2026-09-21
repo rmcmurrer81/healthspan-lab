@@ -37,6 +37,39 @@ The app uses those fields to calculate **research relevance signals**. For trial
 
 A relevance score is not a medical recommendation and is not confirmation that somebody qualifies for a clinical trial. Trial staff determine eligibility.
 
+### Health-record intake
+
+Each household profile can now attach recent medical PDFs or photos.
+
+- files are stored locally in browser IndexedDB;
+- PDFs use browser-side text extraction;
+- scanned PDFs and photos can use browser OCR;
+- detected measurements are placed into a draft review queue;
+- a user must confirm a fact before its label can affect research relevance;
+- numeric measurements are stored but are not automatically labeled normal, abnormal, safe, or unsafe.
+
+Raw medical files are intentionally excluded from normal JSON workspace exports because they can be large and sensitive.
+
+### Research-backed options
+
+Healthspan Lab can also match profile interests, confirmed health-context labels, and the current research question against a conservative catalog of non-prescription product categories.
+
+The first implementation includes categories such as:
+
+- upper-arm blood-pressure monitors;
+- resistance bands;
+- activity trackers / pedometers;
+- sleep masks;
+- broad-spectrum sunscreen;
+- digital home scales;
+- grip-strength dynamometers.
+
+Each card explains why it surfaced, includes a safety note, can launch a research question, and provides retailer search links.
+
+This system does **not** currently turn a lab value into a supplement, medication, or dosage recommendation.
+
+See [docs/PRODUCT_OPTIONS_SAFETY.md](docs/PRODUCT_OPTIONS_SAFETY.md).
+
 ### Local-first privacy
 
 Profiles, notes, and watchlists are stored in browser local storage by default. Healthspan Lab does not upload those local profile records to GitHub or Kira Labs.
@@ -97,9 +130,11 @@ http://localhost:8000
 - `index.html` — research dashboard and profile interface
 - `styles.css` — responsive visual system
 - `app.js` — live research engine, profile matching, graph, watchlist, and notebook
+- `health-records.js` — local medical-record storage, reviewable extraction, confirmed health context, and research-backed product-category matching
 - `docs/RESEARCH_STANDARD.md` — evidence-handling rules
 - `docs/DATA_MODEL.md` — structured research and profile model
 - `docs/PRIVACY_AND_PROFILES.md` — privacy and multi-user matching rules
+- `docs/PRODUCT_OPTIONS_SAFETY.md` — safety rules for practical product-category discovery
 - `ROADMAP.md` — development plan
 
 ## Medical disclaimer
