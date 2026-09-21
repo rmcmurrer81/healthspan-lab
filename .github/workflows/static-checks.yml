@@ -24,7 +24,9 @@ jobs:
           node-version: "22"
 
       - name: Check JavaScript syntax
-        run: node --check app.js
+        run: |
+          node --check app.js
+          node --check health-records.js
 
       - name: Check required files
         shell: bash
@@ -32,8 +34,10 @@ jobs:
           test -f index.html
           test -f styles.css
           test -f app.js
+          test -f health-records.js
           test -f README.md
           test -f docs/RESEARCH_STANDARD.md
           test -f docs/DATA_MODEL.md
           grep -q 'styles.css' index.html
           grep -q 'app.js' index.html
+          grep -q 'health-records.js' index.html
