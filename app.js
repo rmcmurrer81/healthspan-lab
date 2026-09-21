@@ -309,6 +309,9 @@ document.getElementById("deleteProfileBtn").addEventListener("click", function (
   const profiles = getProfiles().filter(function (item) { return item.id !== id; });
   writeJson(STORAGE.profiles, profiles);
   if (getActiveProfileId() === id) setActiveProfileId("");
+  if (typeof window.deleteHealthDataForProfile === "function") {
+    window.deleteHealthDataForProfile(id);
+  }
   clearProfileForm();
   renderProfileSelector();
   setStatus("Profile deleted from this browser.");
@@ -1358,7 +1361,11 @@ function downloadJson(filename, data) {
 document.getElementById("exportNotes").addEventListener("click", function () {
   downloadJson("healthspan-lab-notes.json", {
     exportedAt: new Date().toISOString(),
-    notes: getNotes()
+    notes: getNotes(),
+    healthContext:
+      typeof window.getHealthWorkspaceData === "function"
+        ? window.getHealthWorkspaceData()
+        : null
   });
 });
 
@@ -1392,6 +1399,9 @@ document.getElementById("importWorkspaceInput").addEventListener("change", async
     writeJson(STORAGE.profiles, Array.isArray(data.profiles) ? data.profiles : []);
     writeJson(STORAGE.watchlist, Array.isArray(data.watchlist) ? data.watchlist : []);
     writeJson(STORAGE.notes, Array.isArray(data.notes) ? data.notes : []);
+    if (data.healthContext && typeof window.importHealthWorkspaceData === "function") {
+      window.importHealthWorkspaceData(data.healthContext);
+    }
     setActiveProfileId(data.activeProfileId || "");
 
     renderProfileSelector();
