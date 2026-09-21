@@ -3,106 +3,564 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <meta name="description" content="Healthspan Lab — an evidence-first longevity research workspace from Kira Labs." />
+  <meta name="description" content="Healthspan Lab — a local-first longevity research command center from Kira Labs." />
   <title>Healthspan Lab | Kira Labs</title>
   <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
   <header class="site-header">
-    <div class="brand">
-      <div class="brand-mark" aria-hidden="true">HL</div>
-      <div>
-        <p class="eyebrow">Kira Labs</p>
-        <h1>Healthspan Lab</h1>
+    <div class="header-inner">
+      <div class="brand">
+        <div class="brand-mark" aria-hidden="true">HL</div>
+        <div>
+          <p class="eyebrow">Kira Labs</p>
+          <h1>Healthspan Lab</h1>
+          <p class="tagline">Live evidence, clinical-trial discovery, personal research matching, and reproducible research notes.</p>
+        </div>
+      </div>
+
+      <div class="profile-switcher">
+        <label for="activeProfileSelect">Active profile</label>
+        <div class="profile-switcher-row">
+          <select id="activeProfileSelect" aria-label="Active household profile">
+            <option value="">No profile selected</option>
+          </select>
+          <button id="newProfileBtn" class="button ghost" type="button">+ Profile</button>
+        </div>
+        <span class="privacy-chip">Local-first · household profiles stay in this browser</span>
       </div>
     </div>
-    <p class="tagline">Evidence-first tools for longevity and geroscience research.</p>
   </header>
 
   <main class="app-shell">
-    <section class="notice" aria-label="Research disclaimer">
-      <strong>Research workspace:</strong>
-      Healthspan Lab organizes scientific information. It is not a medical device and does not provide diagnosis, treatment, or individualized medical advice.
+    <section class="safety-banner">
+      <strong>Research tool, not treatment advice.</strong>
+      Healthspan Lab can rank papers and trials for research relevance or possible eligibility signals. It cannot determine whether a treatment or trial is medically appropriate for a person.
+    </section>
+
+    <section class="command-center">
+      <div class="command-copy">
+        <p class="eyebrow">Research Command Center</p>
+        <h2>What should Kira Labs investigate?</h2>
+        <p>
+          Ask a longevity question. Healthspan Lab searches live PubMed literature and ClinicalTrials.gov,
+          organizes the evidence, looks for mixed-result signals, builds a research graph, and can rank results against an optional household profile.
+        </p>
+      </div>
+
+      <div class="research-box">
+        <textarea id="researchQuestion" rows="3" placeholder="Example: What evidence exists that clearing senescent cells improves healthspan in humans?"></textarea>
+        <div class="suggestions" aria-label="Suggested research questions">
+          <button class="query-chip" data-query="senolytics and cellular senescence healthspan">Senolytics</button>
+          <button class="query-chip" data-query="rapamycin aging healthspan humans">Rapamycin</button>
+          <button class="query-chip" data-query="exercise biological aging healthspan">Exercise</button>
+          <button class="query-chip" data-query="epigenetic clocks biological age interventions">Epigenetic clocks</button>
+          <button class="query-chip" data-query="partial cellular reprogramming aging">Partial reprogramming</button>
+        </div>
+
+        <div class="command-actions">
+          <button id="runResearchBtn" class="button primary" type="button">Run Research</button>
+          <button id="matchProfileBtn" class="button secondary" type="button">Find research for active profile</button>
+          <button id="watchQuestionBtn" class="button ghost" type="button" disabled>Watch this question</button>
+        </div>
+
+        <div id="researchStatus" class="research-status" aria-live="polite">
+          Ready. Live searches require an internet connection.
+        </div>
+      </div>
+
+      <div id="profileContext" class="profile-context">
+        <div>
+          <span class="context-label">Personalization</span>
+          <strong>No active profile</strong>
+        </div>
+        <p>Create a profile to rank studies and trials by age, interests, conditions, goals, and general location.</p>
+      </div>
+
+      <div class="metric-grid" aria-label="Research metrics">
+        <article class="metric">
+          <span>PubMed matches</span>
+          <strong id="metricPapers">—</strong>
+          <small id="metricPapersNote">Run a research question</small>
+        </article>
+        <article class="metric">
+          <span>Clinical trials</span>
+          <strong id="metricTrials">—</strong>
+          <small id="metricTrialsNote">Live ClinicalTrials.gov</small>
+        </article>
+        <article class="metric">
+          <span>Profile signals</span>
+          <strong id="metricMatches">—</strong>
+          <small>Possible relevance, not eligibility confirmation</small>
+        </article>
+        <article class="metric">
+          <span>Mixed-result signals</span>
+          <strong id="metricConflicts">—</strong>
+          <small>Automated screening for results worth comparing</small>
+        </article>
+      </div>
     </section>
 
     <nav class="tabs" aria-label="Healthspan Lab sections">
-      <button class="tab active" data-tab="research">Research</button>
-      <button class="tab" data-tab="hallmarks">Hallmarks</button>
-      <button class="tab" data-tab="trials">Clinical Trials</button>
-      <button class="tab" data-tab="notebook">Research Notebook</button>
+      <button class="tab active" data-tab="chat">Healthspan Chat</button>
+      <button class="tab" data-tab="command">Command Center</button>
+      <button class="tab" data-tab="evidence">Evidence</button>
+      <button class="tab" data-tab="trials">Trials</button>
+      <button class="tab" data-tab="graph">Research Graph</button>
+      <button class="tab" data-tab="profiles">Profiles</button>
+      <button class="tab" data-tab="records">Health Records</button>
+      <button class="tab" data-tab="options">Research-Backed Options</button>
+      <button class="tab" data-tab="watchlist">Watchlist</button>
+      <button class="tab" data-tab="notebook">Notebook</button>
     </nav>
 
-    <section id="research" class="panel active">
+    <section id="chat" class="panel active">
       <div class="panel-heading">
         <div>
-          <p class="eyebrow">Research Explorer</p>
-          <h2>Separate interesting ideas from strong evidence</h2>
+          <p class="eyebrow">Healthspan Chat</p>
+          <h2>Talk to the research workspace in plain language</h2>
+          <p class="section-intro">
+            Describe a goal such as “I want to improve my memory.” Healthspan will turn it into a live research search,
+            then separate what it finds into evidence, devices and neurostimulation, medications being studied,
+            practical market options, and clinical trials.
+          </p>
         </div>
-        <span class="status-badge">V1 foundation</span>
+        <span class="status-badge">Profile-aware</span>
       </div>
 
-      <div class="toolbar">
-        <label>
-          <span>Search topics</span>
-          <input id="researchSearch" type="search" placeholder="e.g. senescence, exercise, epigenetics" />
-        </label>
-        <label>
-          <span>Evidence level</span>
-          <select id="evidenceFilter">
-            <option value="all">All levels</option>
-            <option value="mechanistic">Mechanistic / cell</option>
-            <option value="animal">Animal</option>
-            <option value="observational">Human observational</option>
-            <option value="interventional">Human interventional</option>
-          </select>
-        </label>
+      <div class="chat-layout">
+        <section class="chat-window">
+          <div id="healthspanChatMessages" class="chat-messages" aria-live="polite">
+            <article class="chat-message assistant-message">
+              <div class="chat-avatar">H</div>
+              <div class="chat-bubble">
+                <strong>Healthspan</strong>
+                <p>Tell me what you want to improve or investigate. I’ll organize the current research instead of mixing papers, devices, medications, products, and trials together.</p>
+              </div>
+            </article>
+          </div>
+
+          <div class="chat-suggestions">
+            <button class="query-chip" data-chat-example="I want to improve my memory">Improve my memory</button>
+            <button class="query-chip" data-chat-example="I want to preserve muscle and mobility as I get older">Preserve muscle and mobility</button>
+            <button class="query-chip" data-chat-example="What is being researched for better sleep and healthy aging?">Sleep and healthy aging</button>
+            <button class="query-chip" data-chat-example="What research is being done on biological age and epigenetic clocks?">Biological age</button>
+          </div>
+
+          <form id="healthspanChatForm" class="chat-composer">
+            <textarea id="healthspanChatInput" rows="3" placeholder="Example: I want to improve my memory. Show me research, tDCS/device studies, medications being studied, market options, and trials I might be able to join."></textarea>
+            <div class="chat-composer-actions">
+              <span class="helper-inline">Enter to send · Shift+Enter for a new line</span>
+              <button id="healthspanChatSend" class="button primary" type="submit">Ask Healthspan</button>
+            </div>
+          </form>
+        </section>
+
+        <aside class="chat-context-card">
+          <span class="context-label">Active context</span>
+          <div id="healthspanChatProfile">No active profile</div>
+          <p class="helper">When a profile is active, Healthspan can use age, goals, location, interests, and confirmed record labels to rank relevance.</p>
+          <div class="chat-safety-note">
+            <strong>Important:</strong>
+            medication and brain-stimulation sections summarize research and trial activity. They do not tell a user to start a drug or electrical-stimulation protocol.
+          </div>
+        </aside>
       </div>
 
-      <div id="researchCards" class="card-grid"></div>
+      <section class="subpanel chat-results-panel">
+        <div class="subpanel-heading">
+          <div>
+            <h3>Latest Healthspan answer</h3>
+            <span id="healthspanChatAnswerLabel" class="helper-inline">Ask a question to build separated result lanes.</span>
+          </div>
+          <button id="openFullDossierBtn" class="text-button" type="button">Open full dossier →</button>
+        </div>
+
+        <div id="healthspanChatLanes" class="chat-lanes">
+          <div class="empty-state">Your answer will appear here after Healthspan finishes the live research run.</div>
+        </div>
+      </section>
     </section>
 
-    <section id="hallmarks" class="panel">
+    <section id="command" class="panel">
       <div class="panel-heading">
         <div>
-          <p class="eyebrow">Hallmarks Explorer</p>
-          <h2>The 12 hallmarks of aging</h2>
+          <p class="eyebrow">Kira Research Agent</p>
+          <h2>Research dossier</h2>
         </div>
+        <span id="lastRunBadge" class="status-badge">No dossier yet</span>
       </div>
-      <p class="section-intro">
-        A framework used by researchers to organize biological processes associated with aging.
-        A hallmark is a research framework, not proof that changing it will extend human life.
-      </p>
-      <div id="hallmarkCards" class="card-grid"></div>
+
+      <div class="agent-pipeline" aria-label="Research agent workflow">
+        <div class="agent-step" data-step="question"><span>1</span><div><strong>Question</strong><small>Frame the topic</small></div></div>
+        <div class="agent-step" data-step="literature"><span>2</span><div><strong>Literature</strong><small>Search PubMed</small></div></div>
+        <div class="agent-step" data-step="trials"><span>3</span><div><strong>Trials</strong><small>Search human studies</small></div></div>
+        <div class="agent-step" data-step="classify"><span>4</span><div><strong>Classify</strong><small>Evidence ladder</small></div></div>
+        <div class="agent-step" data-step="dossier"><span>5</span><div><strong>Dossier</strong><small>Gaps + relevance</small></div></div>
+      </div>
+
+      <div id="dossierSummary" class="empty-state">
+        Run a research question above. The dossier will combine live literature, live trial records, evidence classification, profile relevance, research gaps, and source links.
+      </div>
+
+      <div class="two-column">
+        <section class="subpanel">
+          <div class="subpanel-heading">
+            <h3>Top literature</h3>
+            <button class="text-button" data-open-tab="evidence" type="button">See all evidence →</button>
+          </div>
+          <div id="paperResults" class="result-list">
+            <div class="empty-mini">No literature loaded.</div>
+          </div>
+        </section>
+
+        <section class="subpanel">
+          <div class="subpanel-heading">
+            <h3>Top clinical trials</h3>
+            <button class="text-button" data-open-tab="trials" type="button">See all trials →</button>
+          </div>
+          <div id="trialResultsPreview" class="result-list">
+            <div class="empty-mini">No trials loaded.</div>
+          </div>
+        </section>
+      </div>
+
+      <section class="subpanel">
+        <div class="subpanel-heading">
+          <h3>Research gaps detected</h3>
+          <span class="helper-inline">Generated from the retrieved set, not a complete scientific review</span>
+        </div>
+        <div id="researchGaps" class="gap-grid">
+          <div class="empty-mini">Run research to identify gaps.</div>
+        </div>
+      </section>
+    </section>
+
+    <section id="evidence" class="panel">
+      <div class="panel-heading">
+        <div>
+          <p class="eyebrow">Evidence Engine</p>
+          <h2>Separate mechanisms, animal studies, human studies, and synthesis</h2>
+        </div>
+        <span id="evidenceQueryLabel" class="status-badge">No active question</span>
+      </div>
+
+      <div class="two-column evidence-top">
+        <section class="subpanel">
+          <h3>Evidence distribution</h3>
+          <div id="evidenceBreakdown" class="evidence-bars">
+            <div class="empty-mini">No evidence loaded.</div>
+          </div>
+        </section>
+
+        <section class="subpanel">
+          <h3>Contradiction / mixed-result finder</h3>
+          <p class="helper">This is a keyword-based screening tool. It flags papers that may deserve side-by-side review; it does not decide which study is correct.</p>
+          <div id="conflictSignals" class="conflict-box">
+            <div class="empty-mini">No signals loaded.</div>
+          </div>
+        </section>
+      </div>
+
+      <section class="subpanel">
+        <div class="subpanel-heading">
+          <h3>Source-backed literature</h3>
+          <div class="filter-row">
+            <select id="evidenceTypeFilter" aria-label="Filter literature by evidence type">
+              <option value="all">All evidence types</option>
+              <option value="human_interventional">Human interventional</option>
+              <option value="human_observational">Human observational</option>
+              <option value="animal">Animal</option>
+              <option value="mechanistic">Mechanistic / cell</option>
+              <option value="evidence_synthesis">Review / synthesis</option>
+            </select>
+          </div>
+        </div>
+        <div id="paperResultsFull" class="result-list large">
+          <div class="empty-mini">Run research to populate live PubMed results.</div>
+        </div>
+      </section>
     </section>
 
     <section id="trials" class="panel">
       <div class="panel-heading">
         <div>
-          <p class="eyebrow">Clinical Trials</p>
-          <h2>Move from headlines to human studies</h2>
+          <p class="eyebrow">Clinical Trial Explorer</p>
+          <h2>Find real human studies and possible profile relevance</h2>
+        </div>
+        <span id="trialQueryLabel" class="status-badge">ClinicalTrials.gov API v2</span>
+      </div>
+
+      <div class="trial-controls">
+        <label>
+          <span>Status</span>
+          <select id="trialStatusFilter">
+            <option value="all">All statuses</option>
+            <option value="RECRUITING">Recruiting</option>
+            <option value="NOT_YET_RECRUITING">Not yet recruiting</option>
+            <option value="ACTIVE_NOT_RECRUITING">Active, not recruiting</option>
+            <option value="COMPLETED">Completed</option>
+          </select>
+        </label>
+
+        <label class="toggle-row">
+          <input id="onlyProfileMatches" type="checkbox" />
+          <span>Show only trials with profile relevance signals</span>
+        </label>
+      </div>
+
+      <div class="trial-warning">
+        A profile match is only a screening signal based on fields such as age, sex, topic keywords, recruiting status, and location text. Trial staff determine actual eligibility.
+      </div>
+
+      <div id="trialResults" class="result-list large">
+        <div class="empty-mini">Run research to populate live ClinicalTrials.gov results.</div>
+      </div>
+    </section>
+
+    <section id="graph" class="panel">
+      <div class="panel-heading">
+        <div>
+          <p class="eyebrow">Research Graph</p>
+          <h2>See how a question connects to evidence</h2>
+        </div>
+        <span class="status-badge">Interactive SVG</span>
+      </div>
+
+      <p class="section-intro">
+        The graph links the research question to detected hallmarks, top PubMed papers, and clinical trials.
+        It is a navigation map, not a causal diagram.
+      </p>
+      <div id="researchGraph" class="graph-shell">
+        <div class="empty-state">Run research to build the graph.</div>
+      </div>
+    </section>
+
+    <section id="profiles" class="panel">
+      <div class="panel-heading">
+        <div>
+          <p class="eyebrow">Household Profiles</p>
+          <h2>Personalize research without mixing family members together</h2>
+        </div>
+        <span class="status-badge">Stored locally</span>
+      </div>
+
+      <div class="privacy-panel">
+        <strong>Privacy model:</strong>
+        profile information is stored in this browser's local storage in Version 2. It is not uploaded to GitHub or Kira Labs by this app.
+        Browser storage is not a medical-record system and is not encrypted by this version, so do not use it for information you would not want stored on this computer.
+      </div>
+
+      <div class="profile-layout">
+        <form id="profileForm" class="profile-form">
+          <input id="profileId" type="hidden" />
+
+          <label>
+            <span>Display name</span>
+            <input id="profileName" required maxlength="80" placeholder="Example: Robert" />
+          </label>
+
+          <label>
+            <span>Birthday</span>
+            <input id="profileBirthDate" type="date" />
+          </label>
+
+          <label>
+            <span>Sex used by trial eligibility (optional)</span>
+            <select id="profileSex">
+              <option value="">Not specified</option>
+              <option value="MALE">Male</option>
+              <option value="FEMALE">Female</option>
+            </select>
+          </label>
+
+          <label>
+            <span>City</span>
+            <input id="profileCity" placeholder="Example: Newark" />
+          </label>
+
+          <label>
+            <span>State / region</span>
+            <input id="profileState" placeholder="Example: New Jersey" />
+          </label>
+
+          <label>
+            <span>Country</span>
+            <input id="profileCountry" value="United States" />
+          </label>
+
+          <label class="full">
+            <span>Health topics / conditions to research</span>
+            <textarea id="profileConditions" rows="3" placeholder="Comma-separated. Optional. Example: cardiovascular health, mobility"></textarea>
+          </label>
+
+          <label class="full">
+            <span>Longevity goals</span>
+            <textarea id="profileGoals" rows="3" placeholder="Example: preserve mobility, improve healthy aging, understand biological-age research"></textarea>
+          </label>
+
+          <label class="full">
+            <span>Research interests</span>
+            <textarea id="profileInterests" rows="3" placeholder="Example: senolytics, exercise, epigenetics, sleep"></textarea>
+          </label>
+
+          <div class="profile-actions full">
+            <button class="button primary" type="submit">Save profile</button>
+            <button id="profileResetBtn" class="button secondary" type="button">New blank profile</button>
+            <button id="deleteProfileBtn" class="button danger" type="button">Delete profile</button>
+          </div>
+        </form>
+
+        <aside class="profile-insight">
+          <h3>How personalization works</h3>
+          <div id="profilePreview" class="profile-preview">
+            <div class="empty-mini">Select or create a profile.</div>
+          </div>
+          <p class="helper">
+            Healthspan Lab uses entered information to rank relevance. It does not diagnose conditions, calculate a medical treatment plan, or silently add facts from another family member.
+          </p>
+        </aside>
+      </div>
+
+      <div class="data-tools">
+        <button id="exportWorkspaceBtn" class="button secondary" type="button">Export workspace JSON</button>
+        <label class="button ghost file-button">
+          Import workspace JSON
+          <input id="importWorkspaceInput" type="file" accept="application/json" hidden />
+        </label>
+      </div>
+    </section>
+
+    <section id="records" class="panel">
+      <div class="panel-heading">
+        <div>
+          <p class="eyebrow">Health Records</p>
+          <h2>Give each profile better context from recent medical records</h2>
+        </div>
+        <span class="status-badge">Local review workflow</span>
+      </div>
+
+      <div class="privacy-panel">
+        <strong>Private by design:</strong>
+        uploaded files are stored in this browser's IndexedDB for the active profile. Healthspan Lab does not commit them to GitHub.
+        Text extraction runs in the browser, but OCR/PDF libraries and OCR language assets are loaded from public CDNs when extraction is requested.
+        Extracted facts are drafts until you confirm them.
+      </div>
+
+      <div class="records-toolbar">
+        <div>
+          <span class="context-label">Active record owner</span>
+          <strong id="recordsProfileLabel">No active profile</strong>
+        </div>
+        <label class="button primary file-button">
+          Add PDF or photo
+          <input id="recordUploadInput" type="file" accept="application/pdf,image/*" multiple hidden />
+        </label>
+      </div>
+
+      <p class="helper">
+        Good examples include recent lab reports, visit summaries, discharge paperwork, or a clear photo of printed results.
+        OCR can make mistakes, especially with numbers, so Healthspan Lab will not use an extracted value until you confirm it.
+      </p>
+
+      <div id="recordExtractionStatus" class="research-status" aria-live="polite"></div>
+
+      <div class="two-column">
+        <section class="subpanel">
+          <div class="subpanel-heading">
+            <h3>Uploaded records</h3>
+            <span class="helper-inline">Stored per profile</span>
+          </div>
+          <div id="healthRecordList" class="record-list">
+            <div class="empty-mini">Select a profile and add a PDF or photo.</div>
+          </div>
+        </section>
+
+        <section class="subpanel">
+          <div class="subpanel-heading">
+            <h3>Draft facts to review</h3>
+            <span class="helper-inline">Never used automatically</span>
+          </div>
+          <div id="draftHealthFacts" class="fact-list">
+            <div class="empty-mini">No extracted draft facts.</div>
+          </div>
+        </section>
+      </div>
+
+      <section class="subpanel">
+        <div class="subpanel-heading">
+          <h3>Confirmed profile facts</h3>
+          <label class="toggle-row compact-toggle">
+            <input id="useFactsForMatching" type="checkbox" checked />
+            <span>Use confirmed fact labels for research relevance</span>
+          </label>
+        </div>
+
+        <form id="manualHealthFactForm" class="health-fact-form">
+          <label>
+            <span>Fact / measurement</span>
+            <input id="manualFactName" required placeholder="Example: LDL cholesterol" />
+          </label>
+          <label>
+            <span>Value</span>
+            <input id="manualFactValue" placeholder="Example: 110" />
+          </label>
+          <label>
+            <span>Unit</span>
+            <input id="manualFactUnit" placeholder="Example: mg/dL" />
+          </label>
+          <label>
+            <span>Record date</span>
+            <input id="manualFactDate" type="date" />
+          </label>
+          <button class="button secondary" type="submit">Add confirmed fact</button>
+        </form>
+
+        <div id="confirmedHealthFacts" class="fact-list">
+          <div class="empty-mini">No confirmed facts for this profile.</div>
+        </div>
+      </section>
+    </section>
+
+    <section id="options" class="panel">
+      <div class="panel-heading">
+        <div>
+          <p class="eyebrow">Research-Backed Options</p>
+          <h2>Turn research into practical things a user can investigate</h2>
+        </div>
+        <button id="refreshOptionsBtn" class="button secondary" type="button">Refresh matches</button>
+      </div>
+
+      <div class="trial-warning">
+        These are research-informed product <strong>categories</strong>, not prescriptions or claims that a product treats aging.
+        Healthspan Lab keeps evidence strength separate from profile relevance. Version 2.1 begins with non-prescription devices and lower-risk wellness items;
+        it does not recommend prescription drugs, hormones, or high-risk supplements.
+      </div>
+
+      <div id="optionsProfileSummary" class="profile-context">
+        <div><span class="context-label">Personalization</span><strong>No active profile</strong></div>
+        <p>Select a profile to see why an option surfaced.</p>
+      </div>
+
+      <div id="researchBackedOptions" class="options-grid">
+        <div class="empty-state">Select a profile or run a research question to generate relevant options.</div>
+      </div>
+    </section>
+
+    <section id="watchlist" class="panel">
+      <div class="panel-heading">
+        <div>
+          <p class="eyebrow">Research Watchlist</p>
+          <h2>Track questions and see what changed</h2>
         </div>
       </div>
 
-      <div class="trial-search">
-        <label for="trialQuery">Search ClinicalTrials.gov</label>
-        <div class="inline-form">
-          <input id="trialQuery" type="search" placeholder="e.g. cellular senescence" />
-          <button id="trialSearchButton" class="primary">Open search</button>
-        </div>
-        <p class="helper">
-          V1 opens the official ClinicalTrials.gov search. A later version can import trial metadata and track status changes.
-        </p>
-      </div>
+      <p class="section-intro">
+        Save a research question after running it. When you rerun a watched question, Healthspan Lab compares the newest PubMed and ClinicalTrials.gov IDs against the previous snapshot.
+      </p>
 
-      <div class="evidence-ladder">
-        <h3>Evidence ladder used by Healthspan Lab</h3>
-        <ol>
-          <li><strong>Mechanistic:</strong> cells, pathways, molecules, or laboratory models.</li>
-          <li><strong>Animal:</strong> effects observed in non-human organisms.</li>
-          <li><strong>Human observational:</strong> associations in people without randomized intervention.</li>
-          <li><strong>Human interventional:</strong> an intervention is prospectively tested in people.</li>
-          <li><strong>Replicated / synthesized:</strong> multiple credible studies or rigorous evidence synthesis.</li>
-        </ol>
+      <div id="watchlistItems" class="watchlist-grid">
+        <div class="empty-state">No watched research questions yet.</div>
       </div>
     </section>
 
@@ -112,7 +570,7 @@
           <p class="eyebrow">Research Notebook</p>
           <h2>Keep questions, sources, and conclusions together</h2>
         </div>
-        <button id="exportNotes" class="secondary">Export JSON</button>
+        <button id="exportNotes" class="button secondary" type="button">Export notes JSON</button>
       </div>
 
       <form id="noteForm" class="note-form">
@@ -120,26 +578,37 @@
           <span>Title</span>
           <input id="noteTitle" required maxlength="120" placeholder="Research question or paper title" />
         </label>
+
         <label>
           <span>Tags</span>
           <input id="noteTags" placeholder="senescence, trial, biomarker" />
         </label>
+
+        <label class="full">
+          <span>Linked research question</span>
+          <input id="noteQuestion" placeholder="Filled automatically after a research run" />
+        </label>
+
         <label class="full">
           <span>Notes</span>
-          <textarea id="noteBody" required rows="7" placeholder="What did you learn? What is still uncertain? What source should be checked next?"></textarea>
+          <textarea id="noteBody" required rows="7" placeholder="What did you learn? What is still uncertain? Which source should be checked next?"></textarea>
         </label>
-        <button class="primary" type="submit">Save note locally</button>
+
+        <button class="button primary" type="submit">Save note locally</button>
       </form>
 
-      <p class="helper">Notebook entries are stored only in this browser using localStorage in Version 1.</p>
+      <p class="helper">Notebook entries are stored in this browser. Export the workspace if you want a backup.</p>
       <div id="notesList" class="notes-list"></div>
     </section>
   </main>
 
   <footer>
-    <p>Healthspan Lab · Kira Labs · Open-source research software</p>
+    <p>Healthspan Lab · Kira Labs · local-first open-source research software</p>
+    <p>Live source data: PubMed / NCBI and ClinicalTrials.gov</p>
   </footer>
 
   <script src="app.js"></script>
+  <script src="health-records.js"></script>
+  <script src="healthspan-chat.js"></script>
 </body>
 </html>
